@@ -2,8 +2,6 @@
 output: github_document
 ---
 
-
-
 # HSFT - Haskell system fetch tool.
 Simple and fast system fetch tool written in haskell.
 Also it can show output of the shell commands,
@@ -18,7 +16,7 @@ it can be easily configured to show anything.
 It can be easily build manualy using cabal.
 
 ```{bash eval=FALSE}
-$ git clone link
+$ git clone https://github.com/Qyutou/hsft
 $ cd hsft
 $ cabal install
 ```

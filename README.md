@@ -15,7 +15,7 @@ example](examples/hsft-example-2.png)
 It can be easily build manualy using cabal.
 
 ``` bash
-$ git clone link
+$ git clone https://github.com/Qyutou/hsft
 $ cd hsft
 $ cabal install
 ```
