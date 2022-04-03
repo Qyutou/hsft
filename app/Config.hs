@@ -15,6 +15,7 @@ import Info.Terminal     ( fetchTerminal )
 import Info.Wm           ( fetchWm )
 import Info.Editor       ( fetchEditor )
 import Info.ShellCommand ( fetchShellCommand )
+import Info.Hostname     ( fetchHostname)
 import System.Process (spawnProcess)
 
 -- | This field defines all data which will be shown
@@ -56,6 +57,7 @@ fetchVolume = fetchShellCommand "pamixer" ["--get-volume-h"]
 fetchFields :: [FetchField]
 fetchFields = [ FetchField ("line",     line) -- This can be used as separator between sections
               , FetchField ("kernel",   fetchKernel)
+              , FetchField ("host", fetchHostname)
               , FetchField ("os",       fetchOs ) 
               , FetchField ("wm",       fetchWm)
               , FetchField ("terminal", fetchTerminal) 
