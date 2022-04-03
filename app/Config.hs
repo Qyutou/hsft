@@ -16,13 +16,12 @@ import Info.Wm           ( fetchWm )
 import Info.Editor       ( fetchEditor )
 import Info.ShellCommand ( fetchShellCommand )
 import Info.Hostname     ( fetchHostname)
-import System.Process (spawnProcess)
 
 -- | This field defines all data which will be shown
 -- | Line word adds a line
 -- | Other word and their functions must be defined in the fetchFields function
 config :: T.Text
-config = "os kernel wm terminal shell"
+config = "host os kernel wm line terminal shell editor line uptime "
 
 -- | Separator used between the title and the info
 -- | The spaces will be added after separator to make all lines have the same size
