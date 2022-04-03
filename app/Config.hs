@@ -21,7 +21,7 @@ import Info.Hostname     ( fetchHostname)
 -- | Line word adds a line
 -- | Other word and their functions must be defined in the fetchFields function
 config :: T.Text
-config = "host os kernel wm line terminal shell editor line uptime "
+config = "host os kernel wm line terminal shell editor line uptime"
 
 -- | Separator used between the title and the info
 -- | The spaces will be added after separator to make all lines have the same size
@@ -44,7 +44,7 @@ colors = Colors { borderColor    = "blue"
 -- | First argument of fetchShell command is command, which must be the full path to executable script
 -- | or the name of the script if its directory in $PATH
 -- | Second arguments is options
--- | For more coplex commands like "$ free -h | awk '/^Mem:/ {print $3} "/" $2'"
+-- | For more complex commands like "$ free -h | awk '/^Mem:/ {print $3} "/" $2'"
 -- | it is possible to create a script, and here only run that script.
 fetchVolume :: IO T.Text
 fetchVolume = fetchShellCommand "pamixer" ["--get-volume-h"]
