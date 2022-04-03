@@ -20,7 +20,7 @@ $ cd hsft
 $ cabal install
 ```
 
-To use the application, directory `.cabal/bin` must be in the $PATH, or
+To run the application, directory `.cabal/bin` must be in the $PATH, or
 application can be installed to specified directory:
 
 ``` bash
