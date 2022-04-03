@@ -27,15 +27,6 @@ application can be installed to specified directory:
 $ cabal install --installdir=$HOME/bin
 ```
 
-## Uninstall
-
-To uninstall simply delete created binary file (by default
-`~/.cabal/bin/hsft`)
-
-``` bash
-$ rm ~/.cabal/bin/hsft
-```
-
 ## Configuration
 
 The configuration file is `app/Config.hs`.
