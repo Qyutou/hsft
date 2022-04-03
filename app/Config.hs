@@ -57,7 +57,7 @@ fetchVolume = fetchShellCommand "pamixer" ["--get-volume-h"]
 fetchFields :: [FetchField]
 fetchFields = [ FetchField ("line",     line) -- This can be used as separator between sections
               , FetchField ("kernel",   fetchKernel)
-              , FetchField ("host", fetchHostname)
+              , FetchField ("host",     fetchHostname)
               , FetchField ("os",       fetchOs ) 
               , FetchField ("wm",       fetchWm)
               , FetchField ("terminal", fetchTerminal) 
