@@ -1,0 +1,50 @@
+cabal-version:      2.4
+name:               hsft
+version:            0.1.0.0
+
+-- A short (one-line) description of the package.
+-- synopsis:
+
+-- A longer description of the package.
+-- description:
+
+-- A URL where users can report bugs.
+-- bug-reports:
+
+-- The license under which the package is released.
+-- license:
+author:             Qyutou
+maintainer:         aseledkov04@gmail.com
+
+-- A copyright notice.
+-- copyright:
+-- category:
+extra-source-files: CHANGELOG.md
+
+executable hsft
+    main-is:          Main.hs
+
+    other-modules:    Config
+                    , Fetch
+                    , Render
+                    , Line
+                    , Colorizer
+                    , DataTypes
+                    , Info.Os
+                    , Info.Shell
+                    , Info.Uptime
+                    , Info.Kernel
+                    , Info.Terminal
+                    , Info.Wm
+                    , Info.ShellCommand
+                    , Info.Editor
+
+    -- LANGUAGE extensions used by modules in this package.
+    -- other-extensions:
+    build-depends:    base ^>=4.14.3.0
+                    , text
+                    , process
+                    , regexpr
+                    , bytestring
+    hs-source-dirs:   app
+    default-language: Haskell2010
