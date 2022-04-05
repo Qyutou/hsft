@@ -35,7 +35,7 @@ data TableField = TableLine
 instance Show TableField where
     show f = case f of
         TableLine      -> "line"
-        TableEmptyLine -> "nothing"
+        TableEmptyLine -> "emptyLine"
         TableError     -> ""
         TableFetchValue (title, sep, info) -> T.unpack $ T.concat [title, sep, info]
 
