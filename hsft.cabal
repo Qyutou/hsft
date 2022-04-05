@@ -27,7 +27,6 @@ executable hsft
     other-modules:    Config
                     , Fetch
                     , Render
-                    , Line
                     , Colorizer
                     , DataTypes
                     , Info.Os
