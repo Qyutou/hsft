@@ -38,6 +38,7 @@ executable hsft
                     , Info.ShellCommand
                     , Info.Editor
                     , Info.Hostname
+                    , Info.Cpu
 
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
