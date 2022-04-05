@@ -12,7 +12,7 @@ module Colorizer where
 
 import qualified Data.Text as T
 
-import DataTypes ( Colors(..), FetchFormat(..) )
+import DataTypes ( Colors(..) )
 
 -- | Add the color to the text
 colorizeText :: T.Text -- ^ Text
@@ -40,11 +40,3 @@ colorizeText text color = T.concat [ "\ESC[1;"
                                    , "m"
                                    , text
                                    , "\ESC[1;0m" ]
-
--- | Apply colors to the fetched data
-applyFetchColors :: FetchFormat -- ^ Fetched data
-                 -> Colors -- ^ Colors
-                 -> FetchFormat -- ^ Colored fetched data
-applyFetchColors f c = f { title = colorizeText (title f) (titleColor c) 
-                         , sep   = colorizeText (sep f)   (separatorColor c) 
-                         , info  = colorizeText (info f)  (infoColor c)}

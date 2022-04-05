@@ -15,74 +15,117 @@ import qualified Data.Text.Encoding as E
 import qualified Data.Text as T
 
 import Data.Char ( isSpace )
-import Data.List ( maximumBy, isInfixOf )
+import Data.List ( maximumBy, isInfixOf, intercalate )
 import Data.Ord ( comparing )
 
-import Fetch ( fetchData )
-import Colorizer ( applyFetchColors, colorizeText )
-import DataTypes ( FetchFormat(..), getLength, Colors(..) )
+import Colorizer ( colorizeText )
+import DataTypes ( Colors(..)
+                 , TableField(..)
+                 , FieldAlign(..)
+                 , getFieldLength
+                 , getTitleLength
+                 , getInfoLength )
 import Config ( separator
-              , colors )
+              , colors
+              , fieldAlign )
+import Fetch ( getTable )
+
+-- | This method is used to add spaces to the every field,
+-- | to make all fields have the same length
+alignTableField :: TableField -> FieldAlign -> Int -> Int -> Int-> TableField
+alignTableField field align maxLen maxTitleLen maxInfoLen = case field of
+    TableLine      -> TableLine
+    TableError     -> TableError
+    TableEmptyLine -> TableEmptyLine
+    TableFetchValue (t, s, i) -> case align of
+        NoAlign   -> do
+            let amount = maxLen - getFieldLength field
+            TableFetchValue (t, s, T.concat [i, T.replicate amount " "])
+        Separator -> do
+            let amount = maxLen - getFieldLength field
+            TableFetchValue (t, T.concat [s, T.replicate amount " "], i)
+        Title     -> do
+            let amountTitle = maxTitleLen - T.length t
+            let amountOnEnd = (maxInfoLen + maxTitleLen + T.length separator) - amountTitle - getFieldLength field
+            TableFetchValue ( T.concat [ t, T.replicate amountTitle " "]
+                            , s
+                            , T.concat [ i, T.replicate amountOnEnd " "] )
+
+-- | This method is used to apply colors to table field
+applyColor' :: TableField -> Colors -> TableField
+applyColor' field colors = case field of
+    TableLine                 -> TableLine
+    TableError                -> TableError
+    TableEmptyLine            -> TableEmptyLine
+    TableFetchValue (t, s, i) -> TableFetchValue ( colorizeText t $ titleColor colors
+                                                 , colorizeText s $ separatorColor colors
+                                                 , colorizeText i $ infoColor colors)
+
+-- | Text which is used as a line
+lineBorder :: T.Text -- ^ Border color
+           -> Int    -- ^ Length 
+           -> T.Text -- ^ Border 
+lineBorder c l = T.concat [ colorizeText "├" c
+                          , colorizeText (T.replicate l "─") (borderColor colors)
+                          , colorizeText "┤" c
+                          , "\n"]
+
+-- | Text which is used as an empty line
+emptyLineBorder :: T.Text -- ^ Border color
+                -> Int    -- ^ Length - amount of spaces
+                -> T.Text -- ^ Certain amount of spaces between borders
+emptyLineBorder c l = T.concat [ colorizeText "│" c
+                               , T.replicate l " " 
+                               , colorizeText "│" c
+                               , "\n"]
+
+-- | Text which is used as border
+fieldBorder :: T.Text -- ^ Text
+            -> T.Text -- ^ Border color
+            -> T.Text -- ^ Text between colored borders
+fieldBorder t c = T.concat [ colorizeText "│ " c
+                           , t
+                           , colorizeText " │" c
+                           , "\n"]
 
 
--- | Add spaces to make line have certain length
-addSpaces :: FetchFormat -- ^ The fetchedData
-          -> Int -- ^ Required new length
-          -> FetchFormat
-addSpaces f l = f { sep = T.concat [ sep f
-                                   , T.replicate (l - getLength f) " "] } 
 
--- | Put the text between two borders
-addBorder :: T.Text -- ^ Text
-          -> Int -- ^ Color
-          -> T.Text -- ^ Color
-          -> T.Text -- ^ Colored border on the begin and end of the text
-addBorder t l c
-    | "line" `isInfixOf` T.unpack t = T.concat [colorizeText "├" c
-                                               , colorizeText (T.replicate l "─") c
-                                               , colorizeText "┤" c, "\n"]
-    | otherwise =  T.concat [colorizeText "│ " c, t, colorizeText " │" c, "\n"]
+-- | Add border to the table field, based on field's type
+applyBorder' :: TableField -> Colors -> Int -> T.Text
+applyBorder' field colors len = case field of
+    TableLine -> lineBorder (borderColor colors) (len + 2)
+    TableEmptyLine -> emptyLineBorder (borderColor colors) (len + 2)
+    TableFetchValue (t, s, i) -> fieldBorder (T.concat [t, s, i]) (borderColor colors)
+    TableError -> ""
 
--- | Add colored border to the text
-addBorders :: [T.Text] -- ^ Text
-           -> Colors   -- ^ Colors
-           -> Int      -- ^ Length of the borders, must be 2 symbols longer than longest string
-           -> [T.Text] -- ^ Text with borders
-addBorders t c l = [ colorizeText (T.concat [ "┌", T.replicate l "─", "┐" ]) (borderColor c), "\n"
-                   , T.concat $ map (\x -> addBorder x l (borderColor c)) t 
-                   , colorizeText (T.concat [ "└", T.replicate l "─", "┘" ]) (borderColor c) ] 
+-- | This method is used to add borders to the table
+applyBorder :: [TableField] -> Int -> Colors -> T.Text
+applyBorder table len colors = T.concat [ colorizeText (T.concat [ "┌", T.replicate (len + 2) "─", "┐" ]) (borderColor colors), "\n"
+                                        , T.concat $ map (\x -> applyBorder' x colors len) table
+                                        , colorizeText (T.concat [ "└", T.replicate (len + 2) "─", "┘" ]) (borderColor colors) ] 
 
--- | Parse the fetchData
-parseFetchData :: [FetchFormat] -> IO T.Text
-parseFetchData fetch = do
-    -- Find the length of the longest string
-    let maximumLength = getLength $ maximumBy (comparing getLength) fetch :: Int
+-- | This method is used to parse the table
+parseTable :: [TableField] -> IO T.Text
+parseTable table = do
+    let maximumLength = getFieldLength $ maximumBy (comparing getFieldLength) table
+    let maximumTitleLength = getTitleLength $ maximumBy (comparing getTitleLength) table
+    let maximumInfoLength = getInfoLength  $ maximumBy (comparing getInfoLength) table
 
-    -- Add spaces to every line after separator
-    -- It makes every line to have the same length
-    let fetchWithSpaces = map (`addSpaces` maximumLength) fetch
+    let alignedTable = map (\x -> alignTableField x fieldAlign maximumLength maximumTitleLength maximumInfoLength) table
+    let coloredTable = map (`applyColor'` colors) alignedTable
 
-    -- Apply colors to the fetched data
-    let coloredFetchData = map (`applyFetchColors` colors) fetchWithSpaces 
-    
-    -- Convert FetchFormat type to [Text]
-    let fetchDataText = map (T.pack . show) coloredFetchData :: [T.Text]
-    
-    -- Add colored borders to the text
-    let textWithBorders = addBorders fetchDataText colors (maximumLength + 2)
+    let newMaxLen = getFieldLength $ maximumBy (comparing getFieldLength) alignedTable
+    let tableWithBorders = applyBorder coloredTable newMaxLen colors
 
-    -- Concat all text lines
-    let result = T.concat textWithBorders
-    
-    return result 
+    return tableWithBorders
 
--- | Print text with utf8 encoding
+-- | Print text with UTF-8 encoding
 printLnText :: T.Text -> IO ()
 printLnText t = BSC.putStrLn $ E.encodeUtf8 t
 
--- | Write a data based on config
+-- | Write a data based on configuration
 render :: T.Text -> IO ()
 render conf = do
-    fetchedData <- fetchData (T.words conf) []
-    parsedData <- parseFetchData fetchedData
-    printLnText parsedData
+    table <- getTable conf
+    result <- parseTable table
+    printLnText result

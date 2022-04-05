@@ -18,20 +18,38 @@ data Colors = Colors
     , infoColor      :: T.Text 
     }
 
--- | Data type with fetched data, it is created to prevent parsing this data multiple times
-data FetchFormat = FetchFormat
-    { title :: T.Text
-    , sep   :: T.Text
-    , info  :: T.Text 
-    } deriving (Eq)
-
-instance Show FetchFormat where
-    show f = T.unpack $ T.concat [title f, sep f, info f] 
-
--- | Method to get length of the fetch line
-getLength :: FetchFormat -> Int
-getLength f = T.length $ T.concat [title f, sep f, info f]
+-- | This data type is used to define the alignment 
+data FieldAlign = NoAlign | Separator | Title
 
 -- | This newtype is used to describe the title and method
 newtype FetchField = FetchField 
     { field :: (T.Text, IO T.Text) }
+
+-- | This data type is used to store fetched results
+data TableField = TableLine
+                | TableError
+                | TableEmptyLine
+                | TableFetchValue (T.Text, T.Text, T.Text)
+
+-- | Add show instance for the table fields
+instance Show TableField where
+    show f = case f of
+        TableLine      -> "line"
+        TableEmptyLine -> "nothing"
+        TableError     -> ""
+        TableFetchValue (title, sep, info) -> T.unpack $ T.concat [title, sep, info]
+
+getFieldLength :: TableField -> Int
+getFieldLength field = case field of 
+    TableFetchValue (t, s, i) -> T.length $ T.concat [t, s, i]
+    _ -> 0
+
+getTitleLength :: TableField -> Int
+getTitleLength field = case field of
+    TableFetchValue (t, _, _) -> T.length t
+    _ -> 0
+
+getInfoLength :: TableField -> Int
+getInfoLength field = case field of
+    TableFetchValue (_, _, i) -> T.length i
+    _ -> 0

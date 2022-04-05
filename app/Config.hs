@@ -4,7 +4,7 @@ module Config where
 
 import qualified Data.Text as T
 
-import DataTypes ( Colors(..), FetchField(..) )
+import DataTypes ( Colors(..), FetchField(..), FieldAlign (..) )
 import Line (line)
 
 import Info.Os           ( fetchOs )
@@ -18,10 +18,11 @@ import Info.ShellCommand ( fetchShellCommand )
 import Info.Hostname     ( fetchHostname)
 
 -- | This field defines all data which will be shown
--- | Line word adds a line
+-- | "line" word adds a line
+-- | "emptyLine" word adds an empty line
 -- | Other word and their functions must be defined in the fetchFields function
 config :: T.Text
-config = "host os kernel wm line terminal shell editor line uptime"
+config = "host os kernel wm line term shell emptyLine uptime"
 
 -- | Separator used between the title and the info
 -- | The spaces will be added after separator to make all lines have the same size
@@ -34,10 +35,10 @@ separator = " ~ "
 -- | so they can be like "31", "35", etc.
 -- | Also more complex like "31m\ESC[1;41" can be used to make multiple formats.
 colors :: Colors
-colors = Colors { borderColor    = "blue"
-                , titleColor     = "yellow"
-                , separatorColor = "yellow"
-                , infoColor      = "brightWhite"}
+colors = Colors { borderColor    = "black"
+                , titleColor     = "red"
+                , separatorColor = "black"
+                , infoColor      = ""}
             
 -- | This function is example of creating the fetch command which just takes output from shell command
 -- | fetchShellCommand function is used to safely get output from the shell command
@@ -59,9 +60,16 @@ fetchFields = [ FetchField ("line",     line) -- This can be used as separator b
               , FetchField ("host",     fetchHostname)
               , FetchField ("os",       fetchOs ) 
               , FetchField ("wm",       fetchWm)
-              , FetchField ("terminal", fetchTerminal) 
+              , FetchField ("term",     fetchTerminal) 
               , FetchField ("uptime",   fetchUptime)
               , FetchField ("shell",    fetchShell)
               , FetchField ("editor",   fetchEditor)  
               , FetchField ("volume",   fetchVolume)
               ]
+
+-- | This variable defines how the final text will be aligned
+-- | NoAlign value means that no spaces will be added
+-- | Separator value means that spaces will be added after separator
+-- | Title means that spaces will be added between title and separator
+fieldAlign :: FieldAlign
+fieldAlign = Title
