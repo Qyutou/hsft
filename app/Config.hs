@@ -15,7 +15,8 @@ import Info.Wm           ( fetchWm )
 import Info.Editor       ( fetchEditor )
 import Info.ShellCommand ( fetchShellCommand )
 import Info.Hostname     ( fetchHostname)
-import Info.Cpu (fetchCpu)
+import Info.Cpu          ( fetchCpu )
+import Info.User         ( fetchUser )
 
 -- | This field defines all data which will be shown
 -- | "line" word adds a line
@@ -57,7 +58,7 @@ fetchVolume = fetchShellCommand "pamixer" ["--get-volume-h"]
 fetchFields :: [FetchField]
 fetchFields = [ FetchField ("kernel",   fetchKernel)
               , FetchField ("host",     fetchHostname)
-              , FetchField ("os",       fetchOs ) 
+              , FetchField ("os",       fetchOs) 
               , FetchField ("wm",       fetchWm)
               , FetchField ("term",     fetchTerminal) 
               , FetchField ("uptime",   fetchUptime)
@@ -65,6 +66,7 @@ fetchFields = [ FetchField ("kernel",   fetchKernel)
               , FetchField ("editor",   fetchEditor)  
               , FetchField ("volume",   fetchVolume)
               , FetchField ("cpu",      fetchCpu)
+              , FetchField ("user",     fetchUser)
               ]
 
 -- | This variable defines how the final text will be aligned
