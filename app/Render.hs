@@ -88,8 +88,6 @@ fieldBorder t c = T.concat [ colorizeText "│ " c
                            , colorizeText " │" c
                            , "\n"]
 
-
-
 -- | Add border to the table field, based on field's type
 applyBorder' :: TableField -> Colors -> Int -> T.Text
 applyBorder' field colors len = case field of
@@ -107,13 +105,17 @@ applyBorder table len colors = T.concat [ colorizeText (T.concat [ "┌", T.repl
 -- | This method is used to parse the table
 parseTable :: [TableField] -> IO T.Text
 parseTable table = do
+    -- Find the maximum length by different parameters 
+    -- For align the text
     let maximumLength = getFieldLength $ maximumBy (comparing getFieldLength) table
     let maximumTitleLength = getTitleLength $ maximumBy (comparing getTitleLength) table
     let maximumInfoLength = getInfoLength  $ maximumBy (comparing getInfoLength) table
 
+    -- Format the text
     let alignedTable = map (\x -> alignTableField x fieldAlign maximumLength maximumTitleLength maximumInfoLength) table
     let coloredTable = map (`applyColor'` colors) alignedTable
 
+    -- Add borders
     let newMaxLen = getFieldLength $ maximumBy (comparing getFieldLength) alignedTable
     let tableWithBorders = applyBorder coloredTable newMaxLen colors
 
@@ -126,6 +128,9 @@ printLnText t = BSC.putStrLn $ E.encodeUtf8 t
 -- | Write a data based on configuration
 render :: T.Text -> IO ()
 render conf = do
+    -- Get the table with content
     table <- getTable conf
+    -- Parse the table to get the text
     result <- parseTable table
+    -- Print the text with UTF-8 encoding
     printLnText result
