@@ -29,7 +29,8 @@ $ cabal install --installdir=$HOME/bin
 
 ## Configuration
 
-The configuration file is `app/Config.hs`.
+The configuration file is `app/Config.hs`. Explanations of every field
+can be found in that file.
 
 After changing configuration file you need to recompile the application:
 
