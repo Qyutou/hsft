@@ -46,7 +46,4 @@ getValue title fields = do
 -- | This method is used to get a list of table fields from configuration
 getTable :: T.Text             -- ^ This is the configuration
             -> IO [TableField] -- ^ Return a list of results
-getTable config = do
-    let configWords = T.words config
-
-    mapM (`getValue` fetchFields) configWords :: IO [TableField]
+getTable config = mapM (`getValue` fetchFields) (T.words config) :: IO [TableField]
