@@ -66,3 +66,9 @@ colors = DataTypes.Colors
   , separatorColor = ""
   , infoColor = "white" }
 ```
+
+## TODO
+
+-   [ ] Create better documentation.
+-   [ ] Add stack support.
+-   [ ] Add more fetch functions.
