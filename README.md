@@ -5,10 +5,10 @@ Simple and fast system fetch tool written in haskell. Also it can show
 output of the shell commands, it can be easily configured to show
 anything.
 
-![HSFT example](examples/hsft-example-1.png) ![HSFT
-example](examples/hsft-example-2.png)
+![HSFT example](examples/img-1.png) ![HSFT example](examples/img-2.png)
 
-![HSFT example](examples/hsft-example-3.png)
+![HSFT example](examples/img-3.png) ![HSFT example](examples/img-4.png)
+![HSFT example](examples/img-5.png)
 
 ## Installation
 
