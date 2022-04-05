@@ -5,7 +5,6 @@ module Config where
 import qualified Data.Text as T
 
 import DataTypes ( Colors(..), FetchField(..), FieldAlign (..) )
-import Line (line)
 
 import Info.Os           ( fetchOs )
 import Info.Shell        ( fetchShell )
@@ -55,8 +54,7 @@ fetchVolume = fetchShellCommand "pamixer" ["--get-volume-h"]
 -- | where the first value is the title (which is used to identify the word from config)
 -- | and the second value is the fetch command, all of them must have type IO Text
 fetchFields :: [FetchField]
-fetchFields = [ FetchField ("line",     line) -- This can be used as separator between sections
-              , FetchField ("kernel",   fetchKernel)
+fetchFields = [ FetchField ("kernel",   fetchKernel)
               , FetchField ("host",     fetchHostname)
               , FetchField ("os",       fetchOs ) 
               , FetchField ("wm",       fetchWm)
