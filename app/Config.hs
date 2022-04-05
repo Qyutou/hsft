@@ -15,6 +15,7 @@ import Info.Wm           ( fetchWm )
 import Info.Editor       ( fetchEditor )
 import Info.ShellCommand ( fetchShellCommand )
 import Info.Hostname     ( fetchHostname)
+import Info.Cpu (fetchCpu)
 
 -- | This field defines all data which will be shown
 -- | "line" word adds a line
@@ -63,6 +64,7 @@ fetchFields = [ FetchField ("kernel",   fetchKernel)
               , FetchField ("shell",    fetchShell)
               , FetchField ("editor",   fetchEditor)  
               , FetchField ("volume",   fetchVolume)
+              , FetchField ("cpu",      fetchCpu)
               ]
 
 -- | This variable defines how the final text will be aligned
