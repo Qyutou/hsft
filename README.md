@@ -72,3 +72,4 @@ colors = DataTypes.Colors
 -   [ ] Create better documentation.
 -   [ ] Add stack support.
 -   [ ] Add more fetch functions.
+-   [ ] Improve speed of fetching disk free space.
