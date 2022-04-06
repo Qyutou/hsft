@@ -18,13 +18,14 @@ import Info.Cmd          ( fetchCmd )
 import Info.Hostname     ( fetchHostname)
 import Info.Cpu          ( fetchCpu )
 import Info.User         ( fetchUser )
+import Info.DiskUsage    ( fetchDiskUsage, fetchAvailSpace )
 
 -- | This field defines all data which will be shown
 -- | "line" word adds a line
 -- | "emptyLine" word adds an empty line
 -- | Other word and their functions must be defined in the fetchFields function
 config :: T.Text
-config = "host os kernel wm line term shell emptyLine uptime"
+config = "host os kernel wm line term shell uptime line root home homeAvail"
 
 -- | Separator used between the title and the info
 -- | The spaces will be added after separator to make all lines have the same size
@@ -57,17 +58,20 @@ colors = Colors { borderColor    = "black"
 -- | where the first value is the title (which is used to identify the word from config)
 -- | and the second value is the fetch command, all of them must have type IO Text
 fetchFields :: [FetchField]
-fetchFields = [ add "kernel"   fetchKernel
-              , add "host"     fetchHostname
-              , add "os"       fetchOs
-              , add "wm"       fetchWm
-              , add "term"     fetchTerminal
-              , add "uptime"   fetchUptime
-              , add "shell"    fetchShell
-              , add "editor"   fetchEditor
-              , add "cpu"      fetchCpu
-              , add "user"     fetchUser
-              , add "volume"   (fetchCmd "pamixer" ["--get-volume-h"])
+fetchFields = [ add "kernel"    fetchKernel
+              , add "host"      fetchHostname
+              , add "os"        fetchOs
+              , add "wm"        fetchWm
+              , add "term"      fetchTerminal
+              , add "uptime"    fetchUptime
+              , add "shell"     fetchShell
+              , add "editor"    fetchEditor
+              , add "cpu"       fetchCpu
+              , add "user"      fetchUser
+              , add "root"      (fetchDiskUsage "/")
+              , add "home"      (fetchDiskUsage "/home")
+              , add "homeAvail" (fetchAvailSpace "/home")
+              , add "volume"    (fetchCmd "pamixer" ["--get-volume-h"])
               ]
 
 -- | This variable defines how the final text will be aligned
