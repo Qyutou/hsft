@@ -41,6 +41,7 @@ executable hsft
                     , Info.Hostname
                     , Info.Cpu
                     , Info.User
+                    , Info.DiskUsage
 
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
@@ -49,5 +50,6 @@ executable hsft
                     , process
                     , regexpr
                     , bytestring
+                    , directory
     hs-source-dirs:   app
     default-language: Haskell2010
