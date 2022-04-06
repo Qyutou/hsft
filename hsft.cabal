@@ -35,7 +35,7 @@ executable hsft
                     , Info.Kernel
                     , Info.Terminal
                     , Info.Wm
-                    , Info.ShellCommand
+                    , Info.Cmd
                     , Info.Editor
                     , Info.Hostname
                     , Info.Cpu

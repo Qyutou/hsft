@@ -13,7 +13,7 @@ import Info.Kernel       ( fetchKernel )
 import Info.Terminal     ( fetchTerminal )
 import Info.Wm           ( fetchWm )
 import Info.Editor       ( fetchEditor )
-import Info.ShellCommand ( fetchShellCommand )
+import Info.Cmd          ( fetchCmd )
 import Info.Hostname     ( fetchHostname)
 import Info.Cpu          ( fetchCpu )
 import Info.User         ( fetchUser )
@@ -42,14 +42,14 @@ colors = Colors { borderColor    = "black"
                 , infoColor      = ""}
             
 -- | This function is example of creating the fetch command which just takes output from shell command
--- | fetchShellCommand function is used to safely get output from the shell command
--- | First argument of fetchShell command is command, which must be the full path to executable script
+-- | fetchCmd function is used to safely get output from the shell command
+-- | First argument of fetchCmd command is command, which must be the full path to executable script
 -- | or the name of the script if its directory in $PATH
 -- | Second arguments is options
 -- | For more complex commands like "$ free -h | awk '/^Mem:/ {print $3} "/" $2'"
 -- | it is possible to create a script, and here only run that script.
 fetchVolume :: IO T.Text
-fetchVolume = fetchShellCommand "pamixer" ["--get-volume-h"]
+fetchVolume = fetchCmd "pamixer" ["--get-volume-h"]
 
 -- | This is the list of FetchField types
 -- | The FetchField has type (Text, IO Text), 

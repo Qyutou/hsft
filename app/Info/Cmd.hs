@@ -1,5 +1,5 @@
 {-|
-Module      : Info.ShellCommand
+Module      : Info.Cmd
 Description : Module which fetch any data by shell command
 Copyright   : (c) Alexey Seledkov, 2022
 License     : MIT
@@ -10,7 +10,7 @@ This module is something like template for modules which handling shell commands
 
 {-# LANGUAGE OverloadedStrings #-}
 
-module Info.ShellCommand where
+module Info.Cmd where
 
 import qualified Data.Text as T
 
@@ -23,10 +23,10 @@ handleCommandOutput :: T.Text -> T.Text
 handleCommandOutput t = T.concat $ T.lines t
 
 -- | Fetch curren volume using pamixer
-fetchShellCommand :: T.Text    -- ^ Command
+fetchCmd :: T.Text    -- ^ Command
                   -> [T.Text]  -- ^ Options
                   -> IO T.Text -- ^ Return command stdout
-fetchShellCommand command options = do
+fetchCmd command options = do
     -- First argument is command
     -- Second argument is options
     -- Thirg arguments is stdinput
