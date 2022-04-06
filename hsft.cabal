@@ -29,6 +29,7 @@ executable hsft
                     , Render
                     , Colorizer
                     , DataTypes
+                    , Utils
                     , Info.Os
                     , Info.Shell
                     , Info.Uptime
