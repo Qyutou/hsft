@@ -5,8 +5,8 @@ Copyright   : (c) Alexey Seledkov, 2022
 License     : MIT
 Maintainer  : qyutou@gmail.com
 
-This module is slow, it based on df command.
-Maybe the speed will be increased if rewrite this in pure haskell.
+This module is slow, it is based on df command.
+Maybe the speed will be increased if it will be rewritten in pure Haskell.
 -}
 
 {-# LANGUAGE OverloadedStrings #-}
@@ -40,7 +40,7 @@ fetchDiskUsage p = do
 
 -- | Get current available space on disk
 fetchAvailSpace :: FilePath  -- ^ Path to directory
-                -> IO T.Text -- ^ Disk usage
+                -> IO T.Text -- ^ Disk available space
 fetchAvailSpace p = do
     isPathCorrent <- doesDirectoryExist p
     if isPathCorrent
