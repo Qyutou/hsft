@@ -29,7 +29,6 @@ fetchDiskUsage p = do
             let dfWords = reverse . T.words $ dfResult
             if length dfWords > 5
                 then do
-                    print dfWords
                     return $ T.concat [dfWords !! 3, "/", dfWords !! 4]
                 else
                     return "not found"
@@ -47,7 +46,6 @@ fetchAvailSpace p = do
             let dfWords = reverse . T.words $ dfResult
             if length dfWords > 3
                 then do
-                    print dfWords
                     return $ dfWords !! 2
                 else
                     return "not found"
