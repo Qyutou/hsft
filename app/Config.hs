@@ -5,6 +5,7 @@ module Config where
 import qualified Data.Text as T
 
 import DataTypes ( Colors(..), FetchField(..), FieldAlign (..) )
+import Utils     ( add )
 
 import Info.Os           ( fetchOs )
 import Info.Shell        ( fetchShell )
@@ -48,25 +49,25 @@ colors = Colors { borderColor    = "black"
 -- | Second arguments is options
 -- | For more complex commands like "$ free -h | awk '/^Mem:/ {print $3} "/" $2'"
 -- | it is possible to create a script, and here only run that script.
-fetchVolume :: IO T.Text
-fetchVolume = fetchCmd "pamixer" ["--get-volume-h"]
+-- fetchVolume :: IO T.Text
+-- fetchVolume = fetchCmd "pamixer" ["--get-volume-h"]
 
--- | This is the list of FetchField types
+-- | This is the list of FetchField type
 -- | The FetchField has type (Text, IO Text), 
 -- | where the first value is the title (which is used to identify the word from config)
 -- | and the second value is the fetch command, all of them must have type IO Text
 fetchFields :: [FetchField]
-fetchFields = [ FetchField ("kernel",   fetchKernel)
-              , FetchField ("host",     fetchHostname)
-              , FetchField ("os",       fetchOs) 
-              , FetchField ("wm",       fetchWm)
-              , FetchField ("term",     fetchTerminal) 
-              , FetchField ("uptime",   fetchUptime)
-              , FetchField ("shell",    fetchShell)
-              , FetchField ("editor",   fetchEditor)  
-              , FetchField ("volume",   fetchVolume)
-              , FetchField ("cpu",      fetchCpu)
-              , FetchField ("user",     fetchUser)
+fetchFields = [ add "kernel"   fetchKernel
+              , add "host"     fetchHostname
+              , add "os"       fetchOs
+              , add "wm"       fetchWm
+              , add "term"     fetchTerminal
+              , add "uptime"   fetchUptime
+              , add "shell"    fetchShell
+              , add "editor"   fetchEditor
+              , add "cpu"      fetchCpu
+              , add "user"     fetchUser
+              , add "volume"   (fetchCmd "pamixer" ["--get-volume-h"])
               ]
 
 -- | This variable defines how the final text will be aligned
