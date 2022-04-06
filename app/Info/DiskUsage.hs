@@ -5,9 +5,8 @@ Copyright   : (c) Alexey Seledkov, 2022
 License     : MIT
 Maintainer  : qyutou@gmail.com
 
-This module is based on command df,
-so it is actually too slow.
-This, probably, must be rewritten in pure haskell to increase performance a lot.
+This module is slow, it based on df command.
+Maybe the speed will be increased if rewrite this in pure haskell.
 -}
 
 {-# LANGUAGE OverloadedStrings #-}
