@@ -25,7 +25,7 @@ import Info.DiskUsage    ( fetchDiskUsage, fetchAvailSpace )
 -- | "emptyLine" word adds an empty line
 -- | Other word and their functions must be defined in the fetchFields function
 config :: T.Text
-config = "host os kernel wm line term shell uptime line root home homeAvail"
+config = "host os kernel wm line term shell uptime line root home"
 
 -- | Separator used between the title and the info
 -- | The spaces will be added after separator to make all lines have the same size
@@ -68,9 +68,8 @@ fetchFields = [ add "kernel"    fetchKernel
               , add "editor"    fetchEditor
               , add "cpu"       fetchCpu
               , add "user"      fetchUser
-              , add "root"      (fetchDiskUsage "/")
-              , add "home"      (fetchDiskUsage "/home")
-              , add "homeAvail" (fetchAvailSpace "/home")
+              , add "root"      (fetchDiskUsage "/") -- This can be used to get free space in format "used/total"
+              , add "home"      (fetchAvailSpace "/home") -- Free space in format "available"
               , add "volume"    (fetchCmd "pamixer" ["--get-volume-h"])
               ]
 
